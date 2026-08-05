@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temas Selectos de Macroeconomía · FE-UNAM · 2027-1</title>
+<meta name="description" content="Curso semestral de la Facultad de Economía, UNAM. Semestre 2027-1, grupo 0004. Imparte Luis Jovanny Zepeda Salazar. De Keynes y el IS-LM al Nuevo Consenso, la crisis de 2008 y los modelos de agentes heterogéneos (TANK y HANK).">
+
+<!-- ==================================================================
+     TIPOGRAFÍAS
+     Space Grotesk  → títulos (técnica, de laboratorio)
+     IBM Plex Sans  → párrafos
+     IBM Plex Mono  → etiquetas, datos, código
+     STIX Two Text  → ecuaciones (es la tipografía con aspecto LaTeX)
+     ================================================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
+<style>
+/* ==================================================================
+   1) TOKENS  ←←←  AQUÍ CAMBIAS COLORES Y TIPOGRAFÍAS
+   La paleta de series (--s1 … --s7) es el orden de color por defecto
+   de MATLAB, el mismo que sale al graficar funciones impulso-respuesta
+   en Dynare. Cada unidad del curso tiene su color de serie.
+   ================================================================== */
+:root{
+  --lienzo:   #080C12;   /* fondo: lienzo de gráfica */
+  --lienzo-2: #0E141C;   /* paneles */
+  --lienzo-3: #141C26;   /* paneles elevados */
+  --rejilla:  rgba(125,160,195,.09);   /* cuadrícula */
+  --borde:    rgba(150,180,210,.16);
+  --texto:    #E8EEF4;
+  --texto-2:  #8A9BAC;
+
+  --s1:#0072BD;  /* azul     · unidad 1 */
+  --s2:#D95319;  /* naranja  · unidad 2 */
+  --s3:#EDB120;  /* ámbar    · unidad 3 */
+  --s4:#7E2F8E;  /* púrpura  · unidad 4 */
+  --s5:#77AC30;  /* verde    · unidad 5 */
+  --s6:#4DBEEE;  /* cian     · unidad 6 */
+  --s7:#A2142F;  /* guinda   · unidad 7 */
+
+  --acento:  var(--s6);   /* enlaces e interacción */
+  --alerta:  var(--s2);   /* avisos e inestabilidad */
+
+  --display:"Space Grotesk", system-ui, sans-serif;
+  --texto-f:"IBM Plex Sans", system-ui, sans-serif;
+  --mono:   "IBM Plex Mono", ui-monospace, monospace;
+  --math:   "STIX Two Text", Cambria, serif;
+
+  --ancho:1160px;
+}
+
+/* ==================================================================
+   2) BASE
+   ================================================================== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--lienzo); color:var(--texto);
+  font-family:var(--texto-f); font-size:17px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  /* cuadrícula de fondo, como papel milimétrico */
+  background-image:
+    linear-gradient(var(--rejilla) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rejilla) 1px, transparent 1px);
+  background-size:52px 52px;
+}
+a{color:inherit}
+.wrap{max-width:var(--ancho); margin:0 auto; padding:0 34px}
+section{padding:104px 0; position:relative; scroll-margin-top:58px}
+section + section{border-top:1px solid var(--borde)}
+
+.rotulo{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--texto-2);
+  display:flex; align-items:center; gap:12px;
+}
+.rotulo b{color:var(--acento); font-weight:500}
+.rotulo::after{content:""; flex:1; height:1px; background:var(--borde)}
+h2.seccion{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(1.9rem,4vw,3rem); line-height:1.1; letter-spacing:-.02em;
+  margin:20px 0 0;
+}
+h2.seccion em{font-style:italic; color:var(--texto-2)}
+.bajada{color:var(--texto-2); font-size:1.05rem; max-width:62ch; margin-top:18px}
+
+/* ==================================================================
+   3) BARRA DE NAVEGACIÓN
+   ================================================================== */
+nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(8,12,18,.82); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--borde);
+}
+nav .wrap{display:flex; align-items:center; gap:26px; height:58px}
+nav .marca{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--texto); white-space:nowrap;
+}
+nav .marca span{color:var(--acento)}
+nav ul{list-style:none; display:flex; gap:22px; margin-left:auto}
+nav a{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--texto-2); text-decoration:none;
+  padding:6px 0; border-bottom:1px solid transparent; transition:color .2s,border-color .2s;
+}
+nav a:hover, nav a:focus-visible{color:var(--texto); border-color:var(--acento); outline:none}
+@media(max-width:900px){ nav ul{display:none} }
+
+/* ==================================================================
+   4) PORTADA · "Figura 1"
+   ================================================================== */
+.portada{position:relative; overflow:hidden; padding:92px 0 0}
+.portada .wrap{position:relative; z-index:2}
+
+/* Banda de curvas: ambiental, a todo lo ancho, sin marco */
+.banda{
+  position:relative; margin:38px 0 4px;
+  margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); width:100vw;
+  opacity:.75; pointer-events:none;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 10%, #000 86%, transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0, #000 10%, #000 86%, transparent 100%);
+}
+.banda svg{display:block; width:100%; height:clamp(150px,17vw,230px)}
+.membrete{display:flex; align-items:center; gap:18px; margin-bottom:44px}
+.membrete img{height:56px; width:auto; filter:brightness(0) invert(1); opacity:.9}
+.membrete .txt{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--texto-2); line-height:1.9}
+.membrete .txt b{display:block; color:var(--texto); font-weight:500}
+
+.portada h1{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(2.7rem,7.6vw,6.2rem); line-height:.98; letter-spacing:-.035em;
+  max-width:16ch;
+}
+.portada h1 .mac{
+  display:block; color:transparent;
+  -webkit-text-stroke:1.4px var(--texto-2);
+}
+.portada .lede{margin-top:30px; max-width:54ch; font-size:1.18rem; color:var(--texto-2)}
+.portada .lede b{color:var(--texto); font-weight:500}
+
+.verbos{display:flex; flex-wrap:wrap; gap:10px; margin-top:32px}
+.verbo{
+  font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  border:1px solid var(--borde); padding:8px 14px; color:var(--texto-2);
+}
+.verbo:nth-child(1){border-color:var(--s1); color:var(--s1)}
+.verbo:nth-child(2){border-color:var(--s2); color:var(--s2)}
+.verbo:nth-child(3){border-color:var(--s3); color:var(--s3)}
+.verbo:nth-child(4){border-color:var(--s5); color:var(--s5)}
+
+.ficha{
+  margin-top:56px; border-top:1px solid var(--borde);
+  display:grid; grid-template-columns:repeat(4,1fr);
+}
+.ficha div{padding:24px 26px 24px 0; border-right:1px solid var(--borde)}
+.ficha div:last-child{border-right:none}
+.ficha dt{font-family:var(--mono); font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--texto-2); margin-bottom:10px}
+.ficha dd{font-family:var(--display); font-weight:500; font-size:1.12rem; line-height:1.35}
+.ficha dd small{display:block; font-family:var(--texto-f); font-weight:400; font-size:.9rem; color:var(--texto-2); margin-top:6px}
+
+.acciones{display:flex; flex-wrap:wrap; gap:12px; padding:30px 0 46px}
+.btn{
+  display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
+  padding:14px 22px; border:1px solid var(--acento); color:var(--lienzo); background:var(--acento);
+  transition:background .2s,color .2s;
+}
+.btn:hover,.btn:focus-visible{background:transparent; color:var(--acento); outline:none}
+.btn.ghost{background:transparent; color:var(--texto); border-color:var(--borde)}
+.btn.ghost:hover,.btn.ghost:focus-visible{border-color:var(--texto); background:rgba(255,255,255,.05); color:var(--texto)}
+.btn .fl{transition:transform .2s}
+.btn:hover .fl{transform:translateX(3px)}
+
+/* ==================================================================
+   5) PRESENTACIÓN
+   ================================================================== */
+.tesis{
+  font-family:var(--display); font-weight:400;
+  font-size:clamp(1.5rem,3.4vw,2.5rem); line-height:1.28; letter-spacing:-.02em;
+  margin-top:40px; max-width:24ch;
+}
+.tesis .hl{color:var(--s3)}
+.dos-col{display:grid; grid-template-columns:1fr 1fr; gap:38px; margin-top:38px}
+.dos-col p{color:var(--texto-2)}
+.dos-col p b{color:var(--texto); font-weight:500}
+.nota-margen{
+  border-left:2px solid var(--s7); padding:4px 0 4px 18px; margin-top:38px;
+  font-family:var(--mono); font-size:12.5px; line-height:1.9; color:var(--texto-2);
+}
+
+/* ==================================================================
+   6) ECUACIONES Y GLOSARIO
+   ================================================================== */
+.modelo{display:grid; grid-template-columns:1.35fr .65fr; margin-top:44px; border:1px solid var(--borde)}
+.ecuaciones{padding:40px; border-right:1px solid var(--borde); background:var(--lienzo-2)}
+.eq{padding:20px 0; border-bottom:1px dashed var(--borde)}
+.eq:last-child{border-bottom:none; padding-bottom:0}
+.eq .f{font-family:var(--math); font-size:clamp(1.12rem,2.3vw,1.5rem); line-height:1.5}
+.eq .f i{font-style:italic}
+.eq .et{font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; margin-bottom:10px}
+.eq:nth-child(1) .et{color:var(--s2)}
+.eq:nth-child(2) .et{color:var(--s1)}
+.eq:nth-child(3) .et{color:var(--s4)}
+.glosario{padding:40px; background:var(--lienzo-3)}
+.glosario h3{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--texto-2); font-weight:500; margin-bottom:20px}
+.glosario dl{display:flex; flex-direction:column; gap:13px}
+.glosario .g{display:grid; grid-template-columns:38px 1fr; gap:12px; align-items:baseline}
+.glosario .g dt{font-family:var(--math); font-style:italic; font-size:1.15rem; color:var(--s3)}
+.glosario .g dd{font-size:.92rem; color:var(--texto-2); line-height:1.45}
+
+/* ==================================================================
+   7) LABORATORIO (simulador del modelo de tres ecuaciones)
+   ================================================================== */
+.lab{margin-top:56px; border:1px solid var(--borde); background:var(--lienzo-2)}
+.lab-cabeza{
+  display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline;
+  padding:22px 32px; border-bottom:1px solid var(--borde);
+}
+.lab-cabeza h3{font-family:var(--display); font-weight:600; font-size:1.28rem; letter-spacing:-.01em}
+.lab-cabeza .id{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--texto-2)}
+.lab-cuerpo{display:grid; grid-template-columns:298px 1fr}
+.controles{padding:28px 30px; border-right:1px solid var(--borde); display:flex; flex-direction:column; gap:24px}
+.control label{
+  display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--texto-2); margin-bottom:12px;
+}
+.control label .v{color:var(--s3); font-size:13px; letter-spacing:0}
+.control input[type=range]{
+  width:100%; -webkit-appearance:none; appearance:none;
+  height:2px; background:var(--borde); outline:none; cursor:pointer;
+}
+.control input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+  background:var(--acento); border:2px solid var(--lienzo-2); cursor:pointer;
+}
+.control input[type=range]::-moz-range-thumb{
+  width:14px; height:14px; border-radius:50%; background:var(--acento);
+  border:2px solid var(--lienzo-2); cursor:pointer;
+}
+.control input[type=range]:focus-visible{outline:2px solid var(--acento); outline-offset:6px}
+.control .pie{font-size:.8rem; color:var(--texto-2); margin-top:9px; line-height:1.45}
+.presets{display:flex; flex-wrap:wrap; gap:8px}
+.presets button{
+  font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  background:transparent; color:var(--texto-2); border:1px solid var(--borde);
+  padding:8px 11px; cursor:pointer; transition:border-color .2s,color .2s;
+}
+.presets button:hover,.presets button:focus-visible{color:var(--texto); border-color:var(--acento); outline:none}
+
+.grafica{padding:24px 30px 28px}
+.grafica svg{width:100%; height:auto; display:block}
+.leyenda{display:flex; flex-wrap:wrap; gap:22px; margin-top:16px; font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--texto-2)}
+.leyenda span{display:inline-flex; align-items:center; gap:8px}
+.leyenda i{width:16px; height:2px; display:inline-block}
+.diagnostico{
+  margin-top:18px; padding:14px 18px; border-left:2px solid var(--s5);
+  background:rgba(119,172,48,.07); font-size:.92rem; line-height:1.5; color:var(--texto-2);
+}
+.diagnostico.malo{border-color:var(--alerta); background:rgba(217,83,25,.09)}
+.diagnostico b{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; display:block; margin-bottom:5px; color:var(--s5)}
+.diagnostico.malo b{color:var(--alerta)}
+
+/* ==================================================================
+   8) TEMARIO
+   ================================================================== */
+.unidades{margin-top:48px; border-top:1px solid var(--borde)}
+.unidad{border-bottom:1px solid var(--borde); padding:26px 0; display:grid; grid-template-columns:96px 1fr; gap:22px}
+.unidad .marca{font-family:var(--mono); font-size:12px; letter-spacing:.12em; color:var(--texto-2); display:flex; align-items:flex-start; gap:10px; padding-top:5px}
+.unidad .marca i{width:24px; height:3px; margin-top:8px; display:block; background:var(--u); flex:none}
+.unidad h3{font-family:var(--display); font-weight:500; font-size:clamp(1.12rem,2.2vw,1.5rem); line-height:1.3; letter-spacing:-.015em}
+.unidad h3 em{font-style:normal; color:var(--u)}
+.lecturas{margin-top:14px}
+.lecturas summary{
+  display:inline-flex; align-items:center; gap:9px; cursor:pointer; list-style:none;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--texto-2); padding:6px 0; transition:color .2s;
+}
+.lecturas summary::-webkit-details-marker{display:none}
+.lecturas summary::before{content:"+"; color:var(--u); font-size:14px; line-height:1}
+.lecturas[open] summary::before{content:"−"}
+.lecturas summary:hover,.lecturas summary:focus-visible{color:var(--texto); outline:none}
+.lecturas ol{list-style:none; counter-reset:l; margin-top:14px; display:flex; flex-direction:column; gap:10px; max-width:88ch}
+.lecturas li{counter-increment:l; font-size:.94rem; line-height:1.5; color:var(--texto-2); padding-left:34px; position:relative}
+.lecturas li::before{
+  content:counter(l,decimal-leading-zero); position:absolute; left:0; top:1px;
+  font-family:var(--mono); font-size:10px; color:var(--u); opacity:.8;
+}
+.lecturas li em{font-style:italic; color:var(--texto)}
+
+/* Ruta de 15 semanas */
+.ruta{margin-top:60px}
+.ruta .tira{display:grid; grid-template-columns:repeat(15,1fr); gap:4px; margin-top:18px}
+.ruta .sem{
+  height:58px; border:1px solid var(--borde); border-top:3px solid var(--u);
+  display:flex; flex-direction:column; justify-content:space-between; padding:6px;
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; color:var(--texto-2);
+  background:var(--lienzo-2);
+}
+.ruta .sem b{color:var(--u); font-weight:500; font-size:11px}
+.ruta .pie{margin-top:12px; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--texto-2)}
+@media(max-width:760px){ .ruta .tira{grid-template-columns:repeat(5,1fr)} }
+
+/* ==================================================================
+   9) EVALUACIÓN Y HERRAMIENTAS
+   ================================================================== */
+.barra-eval{display:flex; height:52px; margin-top:42px; border:1px solid var(--borde); overflow:hidden}
+.barra-eval i{display:block; height:100%}
+.eval-lista{display:grid; grid-template-columns:repeat(2,1fr); gap:0 40px; margin-top:22px}
+.eval-lista .r{display:flex; align-items:center; gap:14px; padding:16px 0; border-bottom:1px solid var(--borde)}
+.eval-lista .r i{width:12px; height:12px; flex:none}
+.eval-lista .r span{flex:1; font-size:1rem}
+.eval-lista .r b{font-family:var(--mono); font-size:1.05rem}
+
+.tools{display:grid; grid-template-columns:repeat(4,1fr); margin-top:48px; border:1px solid var(--borde)}
+.tool{padding:30px 24px; border-right:1px solid var(--borde); background:var(--lienzo-2)}
+.tool:last-child{border-right:none}
+.tool .logo{height:48px; display:flex; align-items:center; margin-bottom:20px}
+.tool .logo img{max-height:48px; max-width:118px; width:auto; height:auto}
+.tool .logo svg{height:46px; width:118px}
+.tool b{display:block; font-family:var(--display); font-size:1.2rem; margin-bottom:8px}
+.tool p{font-size:.9rem; color:var(--texto-2); line-height:1.5}
+
+/* ==================================================================
+   10) BIBLIOGRAFÍA Y PIE
+   ================================================================== */
+.biblio{display:grid; grid-template-columns:1fr 1fr; margin-top:44px; border:1px solid var(--borde)}
+.biblio .c{padding:36px; background:var(--lienzo-2)}
+.biblio .c + .c{border-left:1px solid var(--borde)}
+.biblio h3{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--acento); font-weight:500; margin-bottom:22px}
+.biblio ul{list-style:none; display:flex; flex-direction:column; gap:15px}
+.biblio li{font-size:.95rem; line-height:1.5; color:var(--texto-2); padding-left:20px; position:relative}
+.biblio li::before{content:""; position:absolute; left:0; top:11px; width:9px; height:1px; background:var(--borde)}
+.biblio li em{font-style:italic; color:var(--texto)}
+
+.docente{
+  margin-top:44px; padding:38px; border:1px solid var(--borde); background:var(--lienzo-3);
+  display:flex; flex-wrap:wrap; gap:26px; justify-content:space-between; align-items:center;
+}
+.docente .n{font-family:var(--display); font-size:1.5rem; font-weight:600; letter-spacing:-.01em}
+.docente .r{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--texto-2); margin-top:9px}
+.docente .r span{color:var(--s3)}
+
+footer{border-top:1px solid var(--borde); padding:52px 0; background:var(--lienzo-2)}
+footer .wrap{display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; align-items:flex-end}
+footer .f1{font-family:var(--display); font-size:1.25rem; letter-spacing:-.01em}
+footer .f2{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--texto-2); line-height:1.9; text-align:right}
+
+/* ==================================================================
+   11) APARICIÓN Y RESPONSIVO
+   ================================================================== */
+.aparece{opacity:0; transform:translateY(20px); transition:opacity .8s ease, transform .8s ease}
+.aparece.on{opacity:1; transform:none}
+
+@media(max-width:980px){
+  .modelo{grid-template-columns:1fr}
+  .ecuaciones{border-right:none; border-bottom:1px solid var(--borde)}
+  .lab-cuerpo{grid-template-columns:1fr}
+  .controles{border-right:none; border-bottom:1px solid var(--borde)}
+  .tools{grid-template-columns:1fr 1fr}
+  .tool{border-bottom:1px solid var(--borde)}
+  .tool:nth-child(2n){border-right:none}
+  .ficha{grid-template-columns:1fr 1fr}
+  .ficha div:nth-child(2n){border-right:none}
+}
+@media(max-width:760px){
+  section{padding:72px 0}
+  .wrap{padding:0 22px}
+  .dos-col{grid-template-columns:1fr}
+  .biblio{grid-template-columns:1fr}
+  .biblio .c + .c{border-left:none; border-top:1px solid var(--borde)}
+  .eval-lista{grid-template-columns:1fr}
+  .ficha{grid-template-columns:1fr}
+  .ficha div{border-right:none; border-bottom:1px solid var(--borde); padding:18px 0}
+  .ficha div:last-child{border-bottom:none}
+  .unidad{grid-template-columns:1fr; gap:12px}
+  .ecuaciones,.glosario,.controles,.grafica,.biblio .c,.docente,.lab-cabeza{padding:26px 22px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto !important; animation:none !important}
+  .aparece{opacity:1; transform:none; transition:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAVEGACIÓN ============ -->
+<nav>
+  <div class="wrap">
+    <span class="marca">Temas Selectos de <span>Macroeconomía</span></span>
+    <ul>
+      <li><a href="#presentacion">01 · Objetivo</a></li>
+      <li><a href="#modelo">02 · Modelo</a></li>
+      <li><a href="#temario">03 · Temario</a></li>
+      <li><a href="#evaluacion">04 · Evaluación</a></li>
+      <li><a href="#bibliografia">05 · Bibliografía</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ PORTADA ============ -->
+<header class="portada">
+  <div class="wrap">
+    <div class="membrete">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Escudo-UNAM-escalable.svg" alt="Escudo de la UNAM" onerror="this.style.display='none'">
+      <div class="txt">
+        Universidad Nacional Autónoma de México
+        <b>Facultad de Economía</b>
+      </div>
+    </div>
+
+    <h1>Temas Selectos<span class="mac">de Macroeconomía</span></h1>
+
+    <p class="lede">Un recorrido crítico por las corrientes y los modelos que explican los problemas
+    macroeconómicos. <b>Quince semanas para revisar de dónde viene cada modelo, qué supone y qué
+    política económica se sigue de él</b>, en el mundo y en México.</p>
+
+    <div class="verbos">
+      <span class="verbo">Comprende</span>
+      <span class="verbo">Compara</span>
+      <span class="verbo">Cuestiona</span>
+      <span class="verbo">Aplica</span>
+    </div>
+
+    <!-- Banda ambiental: siete respuestas amortiguadas a un mismo choque -->
+    <div class="banda"><svg id="lienzoIRF" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+
+    <dl class="ficha">
+      <div><dt>Semestre</dt><dd>2027-1<small>Grupo 0004 · 15 semanas</small></dd></div>
+      <div><dt>Horario</dt><dd>Lunes y miércoles<small>18:30 – 20:00 hrs</small></dd></div>
+      <div><dt>Imparte</dt><dd>Luis Jovanny Zepeda Salazar<small>Asesor finalista del Reto Banxico 2026</small></dd></div>
+      <div><dt>Herramientas</dt><dd>R · MATLAB<small>Dynare · Python</small></dd></div>
+    </dl>
+
+    <!-- Sube el PDF al repositorio con este nombre para que funcione el botón -->
+    <div class="acciones">
+      <a class="btn" href="silabo-temas-selectos-2027-1.pdf" target="_blank" rel="noopener">Sílabo completo (PDF) <span class="fl">↓</span></a>
+      <a class="btn ghost" href="#modelo">Probar el modelo <span class="fl">→</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 01 · PRESENTACIÓN ============ -->
+<section id="presentacion">
+  <div class="wrap">
+    <p class="rotulo"><b>01</b> Objetivo del curso</p>
+    <p class="tesis aparece">Comprender la <span class="hl">evolución histórica y analítica</span> de la macroeconomía moderna.</p>
+
+    <div class="dos-col">
+      <p class="aparece">Identificar los problemas que motivaron cada enfoque, sus principales
+      supuestos y <b>las críticas formuladas desde distintas tradiciones teóricas</b>, así como sus
+      implicaciones para la política económica internacional y nacional.</p>
+      <p class="aparece">Concretamente, el curso plantea iniciar desde Keynes, la síntesis neoclásica
+      y el modelo IS–LM, hasta la <b>Nueva Síntesis Neoclásica</b>, los modelos neokeynesianos y su
+      extensión de agentes heterogéneos.</p>
+    </div>
+
+    <p class="nota-margen aparece">
+      Durante las clases utilizaremos herramientas computacionales<br>
+      para modelar y analizar problemas macroeconómicos:<br>
+      R · MATLAB · Dynare · Python
+    </p>
+  </div>
+</section>
+
+<!-- ============ 02 · MODELO + LABORATORIO ============ -->
+<section id="modelo">
+  <div class="wrap">
+    <p class="rotulo"><b>02</b> El modelo de tres ecuaciones</p>
+    <h2 class="seccion">La caja de herramientas del <em>Nuevo Consenso</em></h2>
+    <p class="bajada">El modelo de tres ecuaciones es hoy el marco de referencia más utilizado en la
+    macroeconomía: articula la curva de Phillips, la demanda agregada y una regla de política
+    monetaria en un solo sistema. Es la base de los modelos nuevo keynesianos y el lenguaje con el que
+    trabajan los bancos centrales que operan bajo metas de inflación.</p>
+
+    <div class="modelo aparece">
+      <div class="ecuaciones">
+        <div class="eq">
+          <p class="et">Curva de Phillips neokeynesiana</p>
+          <p class="f"><i>π<sub>t</sub></i> = <i>β</i> E<sub><i>t</i></sub><i>π<sub>t+1</sub></i> + <i>κ x<sub>t</sub></i> + <i>u<sub>t</sub></i></p>
+        </div>
+        <div class="eq">
+          <p class="et">Curva IS dinámica</p>
+          <p class="f"><i>x<sub>t</sub></i> = E<sub><i>t</i></sub><i>x<sub>t+1</sub></i> − (1⁄<i>σ</i>) ( <i>i<sub>t</sub></i> − E<sub><i>t</i></sub><i>π<sub>t+1</sub></i> − <i>r<sup>n</sup><sub>t</sub></i> )</p>
+        </div>
+        <div class="eq">
+          <p class="et">Regla de política monetaria</p>
+          <p class="f"><i>i<sub>t</sub></i> = <i>φ<sub>π</sub> π<sub>t</sub></i> + <i>φ<sub>x</sub> x<sub>t</sub></i> + <i>u<sup>MP</sup><sub>t</sub></i></p>
+        </div>
+      </div>
+
+      <div class="glosario">
+        <h3>Símbolos</h3>
+        <dl>
+          <div class="g"><dt>π</dt><dd>Inflación</dd></div>
+          <div class="g"><dt>x</dt><dd>Brecha del producto</dd></div>
+          <div class="g"><dt>i</dt><dd>Tasa de interés nominal</dd></div>
+          <div class="g"><dt>κ</dt><dd>Pendiente de la curva de Phillips</dd></div>
+          <div class="g"><dt>σ</dt><dd>Elasticidad de sustitución intertemporal</dd></div>
+          <div class="g"><dt>φ<sub>π</sub></dt><dd>Respuesta del banco central a la inflación</dd></div>
+          <div class="g"><dt>r<sup>n</sup></dt><dd>Tasa de interés natural</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- ---------- LABORATORIO INTERACTIVO ---------- -->
+    <div class="lab aparece">
+      <div class="lab-cabeza">
+        <h3>Laboratorio · choque de costos de 1.5 puntos</h3>
+        <span class="id">Fig. 2 — mueve los parámetros</span>
+      </div>
+
+      <div class="lab-cuerpo">
+        <div class="controles">
+          <div class="control">
+            <label for="phipi">φπ · respuesta a la inflación <span class="v" id="v-phipi">1.50</span></label>
+            <input type="range" id="phipi" min="0" max="3" step="0.05" value="1.5">
+            <p class="pie">Por debajo de 1 la tasa real cae cuando sube la inflación: el choque se retroalimenta.</p>
+          </div>
+          <div class="control">
+            <label for="phix">φx · respuesta a la brecha <span class="v" id="v-phix">0.50</span></label>
+            <input type="range" id="phix" min="0" max="1.5" step="0.05" value="0.5">
+          </div>
+          <div class="control">
+            <label for="kappa">κ · pendiente de Phillips <span class="v" id="v-kappa">0.40</span></label>
+            <input type="range" id="kappa" min="0.05" max="0.9" step="0.05" value="0.4">
+          </div>
+          <div class="presets">
+            <button type="button" data-p="1.5,0.5,0.4">Regla de Taylor</button>
+            <button type="button" data-p="0.6,0.3,0.4">Banco pasivo</button>
+            <button type="button" data-p="2.6,0.2,0.4">Halcón</button>
+          </div>
+        </div>
+
+        <div class="grafica">
+          <svg id="chart" viewBox="0 0 720 340" role="img" aria-label="Trayectoria simulada de la inflación y de la brecha del producto tras un choque de costos"></svg>
+          <div class="leyenda">
+            <span><i style="background:var(--s2)"></i> Inflación π</span>
+            <span><i style="background:var(--s1)"></i> Brecha del producto x</span>
+            <span><i style="background:var(--texto-2)"></i> Meta de inflación (3%)</span>
+          </div>
+          <div class="diagnostico" id="diag"><b>Diagnóstico</b><span id="diag-txt"></span></div>
+        </div>
+      </div>
+    </div>
+    <p class="bajada" style="margin-top:18px; font-size:.88rem">Simulación ilustrativa con expectativas
+    adaptativas, al estilo de Carlin y Soskice. Sirve para ver el principio de Taylor en acción, no para pronosticar.</p>
+  </div>
+</section>
+
+<!-- ============ 03 · TEMARIO ============ -->
+<section id="temario">
+  <div class="wrap">
+    <p class="rotulo"><b>03</b> Contenido · 7 unidades</p>
+    <h2 class="seccion">De la <em>Teoría general</em> a los modelos HANK</h2>
+    <p class="bajada">Despliega cada unidad para ver sus lecturas.</p>
+
+    <div class="unidades">
+
+      <article class="unidad aparece" style="--u:var(--s1)">
+        <div class="marca"><i></i>Unidad 01</div>
+        <div>
+          <h3>Nacimiento y método de la macroeconomía</h3>
+          <details class="lecturas">
+            <summary>5 lecturas</summary>
+            <ol>
+              <li>Chick, V. (1983). <em>Macroeconomics after Keynes: a reconsideration of the General Theory</em>. MIT Press. Cap. 3.</li>
+              <li>Hicks, J. R. (1937). “Mr. Keynes and the Classics: A Suggested Interpretation”. <em>Econometrica</em>, 5(2), 147–159.</li>
+              <li>Keynes, J. M. (2003). <em>Teoría general de la ocupación, el interés y el dinero</em>. Fondo de Cultura Económica.</li>
+              <li>Mankiw, N. G. (2006). “The Macroeconomist as Scientist and Engineer”. <em>Journal of Economic Perspectives</em>, 20(4), 29–46.</li>
+              <li>Snowdon, B. y Vane, H. R. (2005). <em>Modern Macroeconomics: Its Origins, Development and Current State</em>. Edward Elgar.</li>
+            </ol>
+          </details>
+        </div>
+      </article>
+
+      <article class="unidad aparece" style="--u:var(--s2)">
+        <div class="marca"><i></i>Unidad 02</div>
+        <div>
+          <h3>Economía abierta: ingreso, tipo de cambio y balanza de pagos</h3>
+          <details class="lecturas">
+            <summary>4 lecturas</summary>
+            <ol>
+              <li>Dornbusch, R. (1981). <em>La macroeconomía de una economía abierta</em>. Antoni Bosch. Caps. 1, 2, 3, 5, 6 y 11.</li>
+              <li>Gandolfo, G. (2002). <em>International Finance and Open Economy Macroeconomics</em>. Springer. Caps. 4, 7 y 10.</li>
+              <li>Krugman, P. y Taylor, L. (1978). “Contractionary Effects of Devaluation”. <em>Journal of International Economics</em>, 8(3), 445–456.</li>
+              <li>Mundell, R. A. (1963). “Capital Mobility and Stabilization Policy under Fixed and Flexible Exchange Rates”. <em>Canadian Journal of Economics and Political Science</em>, 29(4), 475–485.</li>
+            </ol>
+          </details>
+        </div>
+      </article>
+
+      <article class="unidad aparece" style="--u:var(--s3)">
+        <div class="marca"><i></i>Unidad 03</div>
+        <div>
+          <h3>Monetarismo, expectativas y <em>crítica de Lucas</em></h3>
+          <details class="lecturas">
+            <summary>7 lecturas</summary>
+            <ol>
+              <li>Andújar, S. (2023). “La crítica de Lucas como impulsor de los modelos macroeconómicos modernos”. <em>Ciencia, Economía y Negocios</em>, 7(2), 59–73.</li>
+              <li>Friedman, M. (1957). “The permanent income hypothesis”. En <em>A theory of the consumption function</em> (pp. 20–37). Princeton University Press.</li>
+              <li>Friedman, M. (1968). “The Role of Monetary Policy”. <em>American Economic Review</em>, 58(1), 1–17.</li>
+              <li>Kydland, F. E. y Prescott, E. C. (1977). “Rules Rather than Discretion: The Inconsistency of Optimal Plans”. <em>Journal of Political Economy</em>, 85(3), 473–492.</li>
+              <li>Kydland, F. y Prescott, E. (1982). “Time to Build and Aggregate Fluctuations”. <em>Econometrica</em>, 50(6), 1345–1371.</li>
+              <li>Lucas, R. E. Jr. (1976). “Econometric Policy Evaluation: A Critique”. <em>Carnegie-Rochester Conference Series on Public Policy</em>.</li>
+              <li>Phelps, E. S. (1967). “Phillips Curves, Expectations of Inflation and Optimal Unemployment over Time”. <em>Economica</em>, 34(135), 254–281.</li>
+            </ol>
+          </details>
+        </div>
+      </article>
+
+      <article class="unidad aparece" style="--u:var(--s4)">
+        <div class="marca"><i></i>Unidad 04</div>
+        <div>
+          <h3>Nuevo Consenso Macroeconómico, metas de inflación y <em>modelo de tres ecuaciones</em></h3>
+          <details class="lecturas">
+            <summary>6 lecturas</summary>
+            <ol>
+              <li>Carlin, W. y Soskice, D. (2015). <em>Macroeconomics: Institutions, Instability, and the Financial System</em>. Caps. 3, 4 y 9.</li>
+              <li>Clarida, R., Galí, J. y Gertler, M. (1999). “The Science of Monetary Policy: A New Keynesian Perspective”. <em>Journal of Economic Literature</em>, 37(4), 1661–1707.</li>
+              <li>Galí, J. (2015). <em>Monetary Policy, Inflation, and the Business Cycle</em>. Caps. 1–3.</li>
+              <li>Sidaoui, J. y Ramos-Francia, M. (2008). “The monetary transmission mechanism in Mexico: recent developments”. <em>BIS Papers</em>, 35, 363–394.</li>
+              <li>Taylor, J. B. (1993). “Discretion versus Policy Rules in Practice”. <em>Carnegie-Rochester Conference Series on Public Policy</em>, 39, 195–214.</li>
+              <li>Woodford, M. (2003). <em>Interest and Prices: Foundations of a Theory of Monetary Policy</em>. Princeton University Press.</li>
+            </ol>
+          </details>
+        </div>
+      </article>
+
+      <article class="unidad aparece" style="--u:var(--s5)">
+        <div class="marca"><i></i>Unidad 05</div>
+        <div>
+          <h3>Controversias en torno al Nuevo Consenso y al régimen de metas de inflación</h3>
+          <details class="lecturas">
+            <summary>5 lecturas</summary>
+            <ol>
+              <li>Arestis, P. (2009). “New Consensus Macroeconomics: A Critical Appraisal”. University of Cambridge.</li>
+              <li>Arestis, P. y Sawyer, M. (2008). “A Critical Reconsideration of the Foundations of Monetary Policy in the New Consensus Macroeconomics Framework”. <em>Cambridge Journal of Economics</em>, 32(5), 761–779.</li>
+              <li>Godley, W. y Lavoie, M. (2007). <em>Monetary Economics: An Integrated Approach to Credit, Money, Income, Production and Wealth</em>. Palgrave Macmillan.</li>
+              <li>Lavoie, M. (2014). <em>Post-Keynesian Economics: New Foundations</em>. Edward Elgar.</li>
+              <li>Setterfield, M. (2006). “Is Inflation Targeting Compatible with Post Keynesian Economics?”. <em>Journal of Post Keynesian Economics</em>, 28(4), 653–671.</li>
+            </ol>
+          </details>
+        </div>
+      </article>
+
+      <article class="unidad aparece" style="--u:var(--s6)">
+        <div class="marca"><i></i>Unidad 06</div>
+        <div>
+          <h3>La macroeconomía después de la <em>crisis financiera global</em></h3>
+          <details class="lecturas">
+            <summary>6 lecturas</summary>
+            <ol>
+              <li>Bernanke, B. S. (2017). “Monetary Policy in a New Era”. En Blanchard y Summers (eds.), <em>Evolution or Revolution?</em> MIT Press.</li>
+              <li>Bernanke, B. S. (2020). “The New Tools of Monetary Policy”. <em>American Economic Review</em>, 110(4), 943–983.</li>
+              <li>Carlin, W. y Soskice, D. (2024). <em>Macroeconomics: Institutions, Instability, and Inequality</em>. Cap. 18.</li>
+              <li>Gertler, M. y Karadi, P. (2011). “A Model of Unconventional Monetary Policy”. <em>Journal of Monetary Economics</em>, 58(1), 17–34.</li>
+              <li>Haldane, A. G. y Turrel, A. E. (2019). “Un modelo interdisciplinario para la macroeconomía”. <em>Revista de Economía Institucional</em>, 21(40), 69–110.</li>
+              <li>Seccareccia, M. y Khan, M. N. (2019). “The Illusion of Inflation Targeting”. <em>International Journal of Political Economy</em>, 48, 364–380.</li>
+            </ol>
+          </details>
+        </div>
+      </article>
+
+      <article class="unidad aparece" style="--u:var(--s7)">
+        <div class="marca"><i></i>Unidad 07</div>
+        <div>
+          <h3>Desigualdad, mercados incompletos y agentes heterogéneos: <em>TANK y HANK</em></h3>
+          <details class="lecturas">
+            <summary>7 lecturas</summary>
+            <ol>
+              <li>Ahn, S., Kaplan, G., Moll, B., Winberry, T. y Wolf, C. (2017). “When Inequality Matters for Macro and Macro Matters for Inequality”. NBER.</li>
+              <li>Auclert, A. (2019). “Monetary Policy and the Redistribution Channel”. <em>American Economic Review</em>, 109(6), 2333–2367.</li>
+              <li>Kalecki, M. (1954). <em>Teoría de la dinámica económica</em>. Fondo de Cultura Económica.</li>
+              <li>Kaplan, G., Moll, B. y Violante, G. L. (2018). “Monetary Policy According to HANK”. <em>American Economic Review</em>, 108(3), 697–743.</li>
+              <li>Kaplan, G. y Violante, G. L. (2018). “Microeconomic Heterogeneity and Macroeconomic Shocks”. <em>Journal of Economic Perspectives</em>, 32(3), 167–194.</li>
+              <li>Kaplan, G., Violante, G. L. y Weidner, J. (2014). “The Wealthy Hand-to-Mouth”. <em>Brookings Papers on Economic Activity</em>, 2014(1), 77–138.</li>
+              <li>Krusell, P. y Smith, A. A. Jr. (1998). “Income and Wealth Heterogeneity in the Macroeconomy”. <em>Journal of Political Economy</em>, 106(5), 867–896.</li>
+            </ol>
+          </details>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Ruta del semestre. EDITABLE: cambia el arreglo RUTA en el script del final -->
+    <div class="ruta aparece">
+      <p class="rotulo"><b>15</b> semanas</p>
+      <div class="tira" id="tira"></div>
+      <p class="pie">Distribución tentativa, sujeta a ajustes durante el semestre.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 · EVALUACIÓN ============ -->
+<section id="evaluacion">
+  <div class="wrap">
+    <p class="rotulo"><b>04</b> Evaluación y herramientas</p>
+    <h2 class="seccion">Cómo se distribuye <em>la calificación</em></h2>
+    <p class="bajada">La evaluación valora la comprensión, la capacidad de comparación y la
+    aplicación de los modelos.</p>
+
+    <div class="barra-eval aparece">
+      <i style="background:var(--s1); width:25%"></i>
+      <i style="background:var(--s2); width:25%"></i>
+      <i style="background:var(--s3); width:20%"></i>
+      <i style="background:var(--s5); width:30%"></i>
+    </div>
+
+    <div class="eval-lista">
+      <div class="r"><i style="background:var(--s1)"></i><span>Primer examen parcial</span><b>25%</b></div>
+      <div class="r"><i style="background:var(--s2)"></i><span>Segundo examen parcial</span><b>25%</b></div>
+      <div class="r"><i style="background:var(--s3)"></i><span>Controles de lectura y actividades en clase</span><b>20%</b></div>
+      <div class="r"><i style="background:var(--s5)"></i><span>Proyecto final</span><b>30%</b></div>
+    </div>
+
+    <div class="tools aparece">
+      <!-- Íconos dibujados aquí mismo: no dependen de internet.
+           Si quieres los logotipos oficiales, descárgalos, súbelos al repositorio
+           y sustituye cada <svg> por: <img src="r-logo.svg" alt="Logotipo de R"> -->
+      <div class="tool">
+        <div class="logo">
+          <svg viewBox="0 0 118 46" aria-hidden="true">
+            <line x1="2" y1="41" x2="116" y2="41" stroke="rgba(150,180,210,.28)"/>
+            <polyline points="7,32 23,21 39,27 55,12 71,19 87,8 103,15" fill="none"
+                      stroke="var(--s1)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+            <circle cx="23" cy="21" r="2.7" fill="var(--s1)"/>
+            <circle cx="55" cy="12" r="2.7" fill="var(--s1)"/>
+            <circle cx="87" cy="8"  r="2.7" fill="var(--s1)"/>
+          </svg>
+        </div>
+        <b>R</b>
+        <p>Para trabajar con datos macroeconómicos de México, series de tiempo y gráficas.</p>
+      </div>
+
+      <div class="tool">
+        <div class="logo">
+          <svg viewBox="0 0 118 46" aria-hidden="true">
+            <path d="M16 7 H8 V39 H16" fill="none" stroke="var(--s2)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M62 7 H70 V39 H62" fill="none" stroke="var(--s2)" stroke-width="2" stroke-linecap="round"/>
+            <rect x="22" y="11" width="9" height="9" fill="var(--s2)"/>
+            <rect x="35" y="11" width="9" height="9" fill="none" stroke="var(--s2)" stroke-width="1.4"/>
+            <rect x="48" y="11" width="9" height="9" fill="none" stroke="var(--s2)" stroke-width="1.4"/>
+            <rect x="22" y="24" width="9" height="9" fill="none" stroke="var(--s2)" stroke-width="1.4"/>
+            <rect x="35" y="24" width="9" height="9" fill="var(--s2)"/>
+            <rect x="48" y="24" width="9" height="9" fill="none" stroke="var(--s2)" stroke-width="1.4"/>
+          </svg>
+        </div>
+        <b>MATLAB</b>
+        <p>Para resolver y simular numéricamente los modelos que vemos en clase.</p>
+      </div>
+
+      <div class="tool">
+        <div class="logo">
+          <svg viewBox="0 0 118 46" aria-hidden="true">
+            <line x1="2" y1="32" x2="116" y2="32" stroke="rgba(150,180,210,.28)"/>
+            <path d="M2 32 C 12 32, 15 6, 27 6 S 45 46, 58 35 S 76 23, 90 30 S 110 33, 116 32"
+                  fill="none" stroke="var(--s6)" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <b>Dynare</b>
+        <p>Para resolver modelos DSGE y obtener sus funciones impulso-respuesta.</p>
+      </div>
+
+      <div class="tool">
+        <div class="logo">
+          <svg viewBox="0 0 118 46" aria-hidden="true">
+            <line x1="2" y1="41" x2="116" y2="41" stroke="rgba(150,180,210,.28)"/>
+            <rect x="8"  y="30" width="11" height="11" fill="var(--s3)" opacity=".45"/>
+            <rect x="23" y="21" width="11" height="20" fill="var(--s3)" opacity=".6"/>
+            <rect x="38" y="12" width="11" height="29" fill="var(--s3)"/>
+            <rect x="53" y="17" width="11" height="24" fill="var(--s3)" opacity=".8"/>
+            <rect x="68" y="26" width="11" height="15" fill="var(--s3)" opacity=".6"/>
+            <rect x="83" y="33" width="11" height="8"  fill="var(--s3)" opacity=".45"/>
+            <rect x="98" y="37" width="11" height="4"  fill="var(--s3)" opacity=".3"/>
+          </svg>
+        </div>
+        <b>Python</b>
+        <p>Para los modelos de agentes heterogéneos, ahorro precautorio y visualización.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 · BIBLIOGRAFÍA ============ -->
+<section id="bibliografia">
+  <div class="wrap">
+    <p class="rotulo"><b>05</b> Bibliografía general</p>
+    <h2 class="seccion">Lecturas base <em>y complementarias</em></h2>
+    <p class="bajada">Cada unidad tiene además su propia lista de lecturas, que puedes consultar
+    desplegando el temario. Las que aparecen aquí son las que sostienen el curso completo.</p>
+
+    <div class="biblio aparece">
+      <div class="c">
+        <h3>Básica</h3>
+        <ul>
+          <li>Carlin, W. y Soskice, D. (2015). <em>Macroeconomics: Institutions, Instability, and the Financial System</em>. Oxford University Press.</li>
+          <li>Carlin, W. y Soskice, D. (2024). <em>Macroeconomics: Institutions, Instability, and Inequality</em>. Oxford University Press.</li>
+          <li>Keynes, J. M. (2003). <em>Teoría general de la ocupación, el interés y el dinero</em>. Fondo de Cultura Económica.</li>
+          <li>Snowdon, B. y Vane, H. R. (2005). <em>Modern Macroeconomics: Its Origins, Development and Current State</em>. Edward Elgar.</li>
+        </ul>
+      </div>
+      <div class="c">
+        <h3>Complementaria</h3>
+        <ul>
+          <li>Capraro, S., Panico, C. y Torres-González, L. (2024). <em>Inequality and Stagnation: A Monetary Interpretation</em>. Routledge.</li>
+          <li>Capraro, S., Panico, C. y Sandoval, J. K. (2019). <em>Economía monetaria</em>. Facultad de Economía, UNAM.</li>
+          <li>Chick, V. (1983). <em>Macroeconomics after Keynes: A Reconsideration of the General Theory</em>. MIT Press.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- EDITABLE: cambia el correo por el institucional -->
+    <div class="docente aparece">
+      <div>
+        <div class="n">Luis Jovanny Zepeda Salazar</div>
+        <div class="r">Profesor del curso · <span>Asesor finalista del Reto Banxico 2026</span></div>
+      </div>
+      <a class="btn" href="mailto:luisjzepeda@gmail.com">Escribir al profesor <span class="fl">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f1">Comprende. Compara. Cuestiona. Aplica.</div>
+    <div class="f2">
+      Facultad de Economía · UNAM<br>
+      Temas Selectos de Macroeconomía · 2027-1 · Grupo 0004
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ==================================================================
+   A) LIENZO DE PORTADA
+   Siete funciones impulso-respuesta amortiguadas, una por unidad.
+   ================================================================== */
+(function(){
+  var svg = document.getElementById('lienzoIRF');
+  if(!svg) return;
+  var W=1200, H=260, base=130, x0=20;
+  var colores=['--s1','--s2','--s3','--s4','--s5','--s6','--s7'];
+  var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var html='<line x1="0" y1="'+base+'" x2="'+W+'" y2="'+base+'" stroke="rgba(150,180,210,.18)" vector-effect="non-scaling-stroke"/>';
+
+  colores.forEach(function(c,k){
+    var amp  = 100 - k*7;             /* amplitud del choque */
+    var dec  = 0.0038 + k*0.0005;     /* amortiguamiento */
+    var frec = 0.0130 + k*0.0021;     /* frecuencia del ciclo */
+    var fase = k*0.55, d='', x, y;
+    for(x=x0; x<=W; x+=4){
+      y = base - amp*Math.exp(-dec*(x-x0))*Math.sin(frec*(x-x0)+fase);
+      d += (x===x0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    if(quieto){
+      html += '<path d="'+d+'" fill="none" stroke="var('+c+')" stroke-width="1.6" stroke-linecap="round" opacity=".85" vector-effect="non-scaling-stroke"/>';
+    }else{
+      html += '<path d="'+d+'" fill="none" stroke="var('+c+')" stroke-width="1.6" stroke-linecap="round" opacity=".85" vector-effect="non-scaling-stroke" '+
+              'stroke-dasharray="1750" stroke-dashoffset="1750">'+
+              '<animate attributeName="stroke-dashoffset" from="1750" to="0" dur="'+(2.1+k*0.22)+'s" '+
+              'begin="'+(k*0.12)+'s" fill="freeze"/></path>';
+    }
+  });
+  svg.innerHTML = html;
+})();
+
+/* ==================================================================
+   B) LABORATORIO: modelo de tres ecuaciones (versión backward-looking)
+      IS       x_t = -σ (i_{t-1} − π_{t-1} − r*)
+      Phillips π_t = π_{t-1} + κ x_t + u_t
+      Regla    i_t = r* + π* + φπ (π_t − π*) + φx x_t
+      Con φπ < 1 la tasa real cae ante inflación y el sistema explota:
+      así aparece el principio de Taylor sin necesidad de explicarlo.
+   ================================================================== */
+(function(){
+  var svg = document.getElementById('chart');
+  if(!svg) return;
+
+  var T=24, SIGMA=1.0, RN=2, META=3, CHOQUE=1.5;
+  var P = {phipi:1.5, phix:0.5, kappa:0.4};
+
+  function simular(){
+    var pi=[META], x=[0], i=[RN+META], t, u, xt, pit;
+    for(t=1;t<=T;t++){
+      u   = (t===1) ? CHOQUE : 0;
+      xt  = -SIGMA*(i[t-1] - pi[t-1] - RN);
+      pit = pi[t-1] + P.kappa*xt + u;
+      x.push(xt); pi.push(pit);
+      i.push(RN + META + P.phipi*(pit-META) + P.phix*xt);
+    }
+    return {pi:pi, x:x};
+  }
+
+  function dibujar(){
+    var s=simular(), L=52, R=18, TP=18, B=34, W=720, H=340;
+    var ancho=W-L-R, alto=H-TP-B, t, v;
+
+    var todos = s.pi.concat(s.x).filter(function(n){ return isFinite(n); });
+    var lo = Math.max(Math.min(Math.min.apply(null,todos), -1) - 1, -12);
+    var hi = Math.min(Math.max(Math.max.apply(null,todos),  5) + 1,  16);
+
+    var px = function(t){ return L + ancho*t/T; };
+    var py = function(v){ return TP + alto*(hi - Math.max(lo, Math.min(hi, v)))/(hi-lo); };
+    var g = '';
+
+    for(v=Math.ceil(lo/2)*2; v<=hi; v+=2){
+      g += '<line x1="'+L+'" y1="'+py(v).toFixed(1)+'" x2="'+(W-R)+'" y2="'+py(v).toFixed(1)+'" stroke="rgba(150,180,210,.10)"/>'+
+           '<text x="'+(L-10)+'" y="'+(py(v)+4).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8A9BAC">'+v+'</text>';
+    }
+    for(t=0;t<=T;t+=4){
+      g += '<text x="'+px(t).toFixed(1)+'" y="'+(H-12)+'" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8A9BAC">'+t+'</text>';
+    }
+    g += '<text x="'+(W-R)+'" y="'+(H-12)+'" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#8A9BAC" letter-spacing="1.4">TRIMESTRES</text>';
+    g += '<line x1="'+L+'" y1="'+py(META).toFixed(1)+'" x2="'+(W-R)+'" y2="'+py(META).toFixed(1)+'" stroke="#8A9BAC" stroke-dasharray="4 5"/>';
+    g += '<line x1="'+L+'" y1="'+TP+'" x2="'+L+'" y2="'+(H-B)+'" stroke="rgba(150,180,210,.3)"/>';
+
+    function linea(serie, color, gr){
+      var d='';
+      serie.forEach(function(v,t){ d += (t?'L':'M') + px(t).toFixed(1) + ' ' + py(v).toFixed(1); });
+      return '<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+gr+'" stroke-linejoin="round" stroke-linecap="round"/>';
+    }
+    g += linea(s.x,  '#0072BD', 1.8);
+    g += linea(s.pi, '#D95319', 2.4);
+    g += '<circle cx="'+px(1).toFixed(1)+'" cy="'+py(s.pi[1]).toFixed(1)+'" r="3.5" fill="#D95319"/>';
+    svg.innerHTML = g;
+
+    var fin=s.pi[T], desvio=Math.abs(fin-META);
+    var caja=document.getElementById('diag'), txt=document.getElementById('diag-txt');
+    var estable = isFinite(fin) && desvio < 1.0;
+    caja.className = 'diagnostico' + (estable ? '' : ' malo');
+    if(estable){
+      var k=T; while(k>0 && Math.abs(s.pi[k]-META)<0.25){ k--; }
+      txt.textContent = 'La inflación regresa a la meta. Tras el choque el banco central sube la tasa real, '+
+        'la brecha del producto se vuelve negativa y la inflación cede. Desviación en el trimestre 24: '+
+        desvio.toFixed(2)+' pp' + (k<T ? ' · dentro de ±0.25 pp desde el trimestre '+(k+1)+'.' : '.');
+    } else {
+      txt.textContent = 'El sistema no converge. Con φπ = '+P.phipi.toFixed(2)+' la tasa nominal sube menos que '+
+        'la inflación, la tasa real cae y el choque se retroalimenta. Es la violación del principio de Taylor: '+
+        'se necesita φπ > 1.';
+    }
+  }
+
+  function enlazar(id, clave){
+    var s=document.getElementById(id), v=document.getElementById('v-'+id);
+    s.addEventListener('input', function(){
+      P[clave]=parseFloat(s.value); v.textContent=P[clave].toFixed(2); dibujar();
+    });
+  }
+  enlazar('phipi','phipi'); enlazar('phix','phix'); enlazar('kappa','kappa');
+
+  Array.prototype.forEach.call(document.querySelectorAll('.presets button'), function(b){
+    b.addEventListener('click', function(){
+      var p=b.getAttribute('data-p').split(',').map(Number);
+      P.phipi=p[0]; P.phix=p[1]; P.kappa=p[2];
+      document.getElementById('phipi').value=p[0];
+      document.getElementById('phix').value=p[1];
+      document.getElementById('kappa').value=p[2];
+      document.getElementById('v-phipi').textContent=p[0].toFixed(2);
+      document.getElementById('v-phix').textContent=p[1].toFixed(2);
+      document.getElementById('v-kappa').textContent=p[2].toFixed(2);
+      dibujar();
+    });
+  });
+
+  dibujar();
+})();
+
+/* ==================================================================
+   C) RUTA DE 15 SEMANAS
+   EDITABLE: cada número indica qué unidad se ve esa semana.
+   ================================================================== */
+(function(){
+  var RUTA=[1,1,2,2,3,3,4,4,4,5,5,6,6,7,7];
+  var tira=document.getElementById('tira');
+  if(!tira) return;
+  tira.innerHTML = RUTA.map(function(u,k){
+    return '<div class="sem" style="--u:var(--s'+u+')" title="Semana '+(k+1)+' · Unidad '+u+'">'+
+           '<span>U'+u+'</span><b>S'+(k+1)+'</b></div>';
+  }).join('');
+})();
+
+/* ==================================================================
+   D) APARICIÓN AL HACER SCROLL
+   ================================================================== */
+(function(){
+  var b=document.querySelectorAll('.aparece');
+  if(!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    Array.prototype.forEach.call(b,function(e){ e.classList.add('on'); }); return;
+  }
+  var o=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); o.unobserve(e.target); } });
+  },{threshold:.1, rootMargin:'0px 0px -50px 0px'});
+  Array.prototype.forEach.call(b,function(e){ o.observe(e); });
+})();
+</script>
+</body>
+</html>
